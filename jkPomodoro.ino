@@ -19,6 +19,23 @@
  several times. The system will go back to the initial status
  with only the green LED turned on and a new cycle can be started.
 
+ Power:
+ The board is powered by 5V outlet of the arduino
+
+ Button:
+ The button is wired to port #2 of the arduino and also has a 10k Ohm
+ resistor bridge to ground (so that it gets recognized as LOW when not
+ pressed)
+
+ Break LED:
+ The break LED indicates stand-by status (i.e. waiting for button press)
+ It is wired to port 3 and ground with a 220 Ohm resistor
+
+ Minute interval indicators:
+ The 5 minute interval indicators are wired to ports 4-8 and each use a
+ 220 Ohm resistor.
+
+ See layout.JPG for an overview
 */
 
 const int firstStatusLED = 4;
