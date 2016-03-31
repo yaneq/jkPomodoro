@@ -47,7 +47,7 @@ void setup() {
   // declare the LED pins as outputs
   pinMode(breakLED, OUTPUT);
   for(int i = 0; i < LEDCount; i++) {
-    pinMode(firstStatusLED + i, OUTPUT);
+    pinMode(led(i), OUTPUT);
   }
 
   // declare the switch pin as an input
@@ -55,9 +55,34 @@ void setup() {
   digitalWrite(breakLED, HIGH);
 }
 
-int getLEDID(int index) {
+int led(int index) {
   return firstStatusLED + index;
 }
+
+void on(int index) {
+  digitalWrite(led(index), HIGH);
+}
+
+void off(int index) {
+  digitalWrite(led(index), LOW);
+}
+
+void pomodoroCycle() {
+  digitalWrite(breakLED, LOW);
+
+  for(int i = 0; i < LEDCount; i++) {
+    on(i);
+    delay(300000);
+  }
+}
+
+void reset() {
+  digitalWrite(breakLED, HIGH);
+  for(int i = 0; i < LEDCount; i++) {
+    off(i);
+  }
+}
+
 
 // eye candy
 
@@ -65,16 +90,16 @@ void blinkLEDs(int times) {
   // light show, yay!
   for(int i = 0; i < times; i++) {
     for(int i = 0; i < LEDCount; i++) {
-      digitalWrite(firstStatusLED + i, HIGH);
+      on(i);
     }
     delay(260);
     for(int i = 0; i < LEDCount; i++) {
-      digitalWrite(firstStatusLED + i, LOW);
+      off(i);
     }
     delay(260);
   }
   for(int i = 0; i < LEDCount; i++) {
-    digitalWrite(firstStatusLED + i, HIGH);
+    on(i);
   }
 }
 
@@ -82,7 +107,7 @@ void cascadeLEDs(bool inverseDirection, int sig) {
   int dir = inverseDirection ? -1 : 1;
   int currentLED = 0;
   for(int i = 0; i < LEDCount; i++) {
-    currentLED = getLEDID(inverseDirection ? LEDCount -i -1 : i);
+    currentLED = led(inverseDirection ? LEDCount -i -1 : i);
     digitalWrite(currentLED, sig);
     delay(130);
   }
@@ -93,15 +118,15 @@ void knightRiderLEDs(bool inverseDirection, int delayTime) {
   int currentLED = 0;
   int previousLED = -1;
   for(int i = 0; i < LEDCount; i++) {
-    currentLED = getLEDID(inverseDirection ? LEDCount -i -1 : i);
-    digitalWrite(currentLED, HIGH);
+    currentLED = inverseDirection ? LEDCount -i -1 : i;
+    on(currentLED);
     if (previousLED >= 0) {
-      digitalWrite(previousLED, LOW);
+      off(previousLED);
     }
     previousLED = currentLED;
     delay(delayTime);
   }
-  digitalWrite(previousLED, LOW);
+  off(previousLED);
 }
 
 void knightRiderLEDLoop(int iterations, bool inverse) {
@@ -138,23 +163,9 @@ void lightShow() {
   cascadeLEDs(true, LOW);
 }
 
-void pomodoroCycle() {
-  digitalWrite(breakLED, LOW);
-
-  for(int i = 0; i < LEDCount; i++) {
-    digitalWrite(firstStatusLED + i, HIGH);
-    delay(300000);
-  }
-}
-
-void reset() {
-  digitalWrite(breakLED, HIGH);
-  for(int i = 0; i < LEDCount; i++) {
-    digitalWrite(firstStatusLED + i, LOW);
-  }
-}
 
 // main app loop
+
 void loop() {
   if (digitalRead(button) == HIGH) {
     pomodoroCycle();
@@ -162,4 +173,3 @@ void loop() {
     reset();
   }
 }
-
