@@ -154,11 +154,7 @@ void lightShow() {
   cascadeLEDs(true, LOW);
   cascadeLEDs(false, HIGH);
   blinkLEDs(2);
-  knightRiderLEDLoop(20, false);
-  cascadeLEDs(false, LOW);
-  cascadeLEDs(true, HIGH);
-  cascadeLEDs(true, LOW);
-  cascadeLEDs(true, HIGH);
+  knightRiderLEDLoop(30, false);
   blinkLEDs(3);
   cascadeLEDs(true, LOW);
 }
