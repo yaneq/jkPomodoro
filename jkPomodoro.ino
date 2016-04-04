@@ -43,6 +43,9 @@ const int LEDCount = 5;
 const int breakLED = 3;
 const int button = 2;
 
+
+// setup
+
 void setup() {
   // declare the LED pins as outputs
   pinMode(breakLED, OUTPUT);
@@ -54,6 +57,9 @@ void setup() {
   pinMode(button, INPUT);
   digitalWrite(breakLED, HIGH);
 }
+
+
+// helper methods
 
 int led(int index) {
   return firstStatusLED + index;
@@ -67,19 +73,27 @@ void off(int index) {
   digitalWrite(led(index), LOW);
 }
 
+void reset() {
+  digitalWrite(breakLED, HIGH);
+  for(int i = 0; i < LEDCount; i++) {
+    off(i);
+  }
+}
+
+
+// pomodoro cycle loop
+
 void pomodoroCycle() {
   digitalWrite(breakLED, LOW);
 
   for(int i = 0; i < LEDCount; i++) {
     on(i);
-    delay(300000);
-  }
-}
-
-void reset() {
-  digitalWrite(breakLED, HIGH);
-  for(int i = 0; i < LEDCount; i++) {
-    off(i);
+    for (int j = 0; j < LEDCount; j++) {
+      delay(60000);
+      if (i == LEDCount - 1) {
+        off(j);
+      }
+    }
   }
 }
 
